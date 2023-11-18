@@ -1,1 +1,2 @@
-# VirtuHome-Backend
+# VirtuHome-backend
+Backend VirtuHome mobile app with firebase.
