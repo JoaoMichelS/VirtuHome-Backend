@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "virtuhome-b701e",
+  "private_key_id": "fa259670713afa01514cc152b6eef14912f4847c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDTeSfr/JW4BHcy\nY2Nijp0DqirQZmmZw6up/VDAXxtRFMN9CX3ZOrGueEI0/2yA6q04TQcopjgW31oR\n6y9FO/B9SEoNGedlv89FxIetGY/Vx782/+oDoCIcFh860k0VRCldfwKz/Mk4XMzo\nLzfrLaSsVTv1SkmXBh3Vo3siDLj91KaNqxstgruLLeRB1V5zZjnvyhuwteugO02u\ns0oAAIU4f7Y221+DyRz+9urNffBSt9ksU0rBpeSLQuR3ROU2MFHPJo91saEuMMfB\nHDB/CBCQJq0M6GO/IX8Oi1ooFLlSnxJXXQ82XE1hbiOALixevzlF5WVYRsOomj7z\niQIIaHvvAgMBAAECggEAHr6mhzCZs78ydSjt8g451aaPwuygvbIs6vHhI5awKgGS\nykLvAP3/hxYEyh+4bqWvuVe5irdfwDOIrMI8hRxJwm0YFv+FHM3eHI6OCySEPNhl\nfGGIbC6DxwGQWMTqYAUg3m7wvaoqtv8G61qyDob8QfHCXc8HE+XXwI+b/z9KRdy4\n0oZFrhRBLbr7l6PvULEVDD+x24szMSLjI9GmcMC6KIXLUUU1tjRcQvsfuWKeF7m8\nJ6ndoxg5Vg7NzalFTg3AuSluf459B1sTDXiMm4pEIjnCiQHZ9bSEVwspTEf+FgLg\nDh/KZPui4tdwhVFQdXL+WGZGCVoPt3Am09X5DR30AQKBgQD9jdxUMcg64hqC1Hje\ny8CJu1APskaT2J/n/ol28xT5wOEmpbfKh6FEaLAcV9FrhscqNG4YlSj4OvCzOvjg\nSLe4C2VsGKZYUaMJT9Z3rqOrBaLBdWDekI37tQGUtFfqX75XHEedo+Xrn3R+vXfW\nXfHwKgQ/x5bGEBd5rYS6iBGPQQKBgQDVg2DvRrFHpYZXQRhjlnDfWYjt0IQC+Yal\nxtGi1o+vVF6ebF6BHka7X0RekR++Vsyu7kajiBy5M/HLBDiYLvKB71SZjo//aHr6\nnM87LRBcm413BGOLbWGXPnfr8Tsh+KfSogv43AbUJkrNeO/JP0IdKztAOn3hLsLe\n9baNfZJvLwKBgGKeFH4ixrAwVQNhxIlTUlW/pwoT2uOSM8+17p13OkdRv8CaX/vD\n+PN0jFrZxTg/OaOutMuW6FJ0Cj6Lx1Tks6A/vnjmtXxQdEsg5Fe0czAHhyAbmUu3\niaHG6xB9fFxKVOvoseocX0bfxB2vb7bO31T74p8z7+6lP5wx4xfx6HKBAoGAPNg3\no3hNxNESu4K9ZIPWno9xSfQF6qMZD9zcmL70K06ruBHBzKHIHlVDsn9AwIkTwzX7\nw1ZieRSobuZBCn02dnixbyEFQA+SHCDbnU12QC3D3orNo0oEaYlPu1j/NOsbSBcN\nullZSNOwtWUlUABK4u0S8Xa5sJYWylrTLvb959kCgYBtnIadriT4CNs5sC1yx3wI\nIAB08Vv5+2Xcn00hve7ns2G/2OKh/kq78TIv1j6Q3vq/Zm+kfCLfUGooym5VeP63\n7Y129FdsAyX2zpTPVtw7T79idO9CBmfHbg9lpJT3sabNaE0lE/YPRhS1bc/pNECk\nVa9VBusg4bBR44AzMmwijw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-se82g@virtuhome-b701e.iam.gserviceaccount.com",
+  "client_id": "103664723393314221295",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-se82g%40virtuhome-b701e.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

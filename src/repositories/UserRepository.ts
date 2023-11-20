@@ -12,7 +12,7 @@ export class UserRepository{
             "name": doc.data()?.name,
             "email": doc.data()?.email,
             "id": doc.id,
-            "operator": doc.data()?.operator
+            "accounts": doc.data()?.accounts
         }};
     }
 
