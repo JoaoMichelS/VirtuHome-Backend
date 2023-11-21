@@ -1,6 +1,5 @@
 import { AccountService } from "../services/AccountServices";
 import { UserService } from "../services/UserServices";
-import { User } from "../models/User";
 import { Account } from "../models/Account";
 import { Request, Response, Router } from "express";
 import { v4 as uuid, v4 } from 'uuid';
@@ -22,6 +21,17 @@ export class AccountController{
         this.router.get(this.path + 's/:id', this.getUserAccounts.bind(this));
         this.router.get(this.path + 's/:status', this.getAccountByStatus.bind(this));
         this.router.post(this.path, this.postCreateAccount.bind(this));
+        this.router.post(this.path + '/delete/:id', this.postDeleteAccount.bind(this));
+    }
+
+    public async postDeleteAccount(req: Request, res: Response){
+        const account = await this.accountService.postDeleteCallById(req.params.id);
+        if (account == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(account); 
+        }; 
     }
 
     public async postCreateAccount(req: Request, res: Response) {
@@ -40,6 +50,7 @@ export class AccountController{
             name: name,
             balance: 0,
             status: true,
+            transactions: []
         };
 
         const response = await this.accountService.postCreateAccount(newAccount);
@@ -90,5 +101,15 @@ export class AccountController{
         else {
             res.status(200).send(accounts); 
         };
+    }
+
+    public async postUpdateUserById(req: Request, res: Response){
+        const response = await this.accountService.postUpdateAccountById(req.params.id, req.body);
+        if (response == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(response); 
+        }; 
     }
 }
