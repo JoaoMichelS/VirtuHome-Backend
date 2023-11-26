@@ -35,7 +35,7 @@ export class AccountController{
     }
 
     public async postCreateAccount(req: Request, res: Response) {
-        const { userId, name } = req.body;
+        const { userId, name, balance } = req.body;
 
         // Verifique se o usuário existe
         const userExists = await this.userService.getUserById(userId);
@@ -48,7 +48,7 @@ export class AccountController{
             accountId: uuid(),
             userId: userId, 
             name: name,
-            balance: 0,
+            balance: balance,
             status: true,
             transactions: []
         };
