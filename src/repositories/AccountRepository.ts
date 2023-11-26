@@ -57,7 +57,6 @@ export class AccountRepository{
         }
     }
 
-    
     public async findUserAccounts(userId: string): Promise<Account[] | undefined> {
         try {
           const accountsRef = db.collection('Account');
