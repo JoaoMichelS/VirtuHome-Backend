@@ -58,12 +58,35 @@ export class AccountRepository{
     }
 
     
-    public async findUserAccounts(userID: string): Promise<Account[] | undefined>{
-        const accounts = db.collection('Account').where("userID", "==", userID).
-        withConverter(documentConverter<Account>());
-        const docs = (await accounts.get()).docs
-        return this.checkDocs(docs);
-    }
+    public async findUserAccounts(userId: string): Promise<Account[] | undefined> {
+        try {
+          const accountsRef = db.collection('Account');
+          const querySnapshot = await accountsRef.where('userId', '==', userId).get();
+      
+          if (querySnapshot.empty) {
+            console.log('No matching documents.');
+            return [];
+          } else {
+            const accounts: Account[] = [];
+            querySnapshot.forEach((doc) => {
+              const accountData = doc.data();
+              const account: Account = {
+                name: accountData.name,
+                userId: accountData.userId,
+                balance: accountData.balance,
+                status: accountData.status,
+                accountId: accountData.accountId,
+                transactions: accountData.transactions
+              };
+              accounts.push(account);
+            });
+            return accounts;
+          }
+        } catch (error) {
+          console.error('Error getting account by accountId:', error);
+          return undefined;
+        }
+      }
 
     public async findAccountByStatus(status: boolean): Promise<Account[] | undefined>{
         const accounts = db.collection('Account').where("status", "==", status).

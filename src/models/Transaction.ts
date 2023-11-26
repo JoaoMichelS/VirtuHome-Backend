@@ -3,6 +3,7 @@ export interface Transaction {
     accountId: string; // ID da conta associada à transação
     amount: number; // Valor da transação
     type: 'income' | 'expense'; // Tipo de transação (entrada ou saída)
+    category: 'Moradia' | 'Alimentação' | 'Saúde' | 'Transporte' | 'Educação' | 'Lazer';
     description: string; // Descrição da transação
     date: Date; // Data da transação
 }

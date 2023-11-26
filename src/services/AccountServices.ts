@@ -11,8 +11,8 @@ export class AccountService{
         return this.accountRepository.findAccountById(id);
     }
 
-    public async getUserAccounts(userID: string): Promise<Account[] | undefined> {
-        return this.accountRepository.findUserAccounts(userID);
+    public async getUserAccounts(id: string): Promise<Account[] | undefined> {
+        return this.accountRepository.findUserAccounts(id);
     }
 
     public async getAccountByStatus(status: boolean): Promise<Account[] | undefined> {

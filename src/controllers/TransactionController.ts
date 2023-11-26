@@ -33,7 +33,7 @@ export class TransactionController{
     }
 
     public async postCreateTransaction(req: Request, res: Response) {
-        const { id, accountId, amount, type, description, date } = req.body;
+        const { id, accountId, amount, type, category, description, date } = req.body;
 
         // Verifique se a conta existe
         const accountExists = await this.accountService.getAccountById(accountId);
@@ -47,6 +47,7 @@ export class TransactionController{
             accountId: accountId,
             amount: amount,
             type: type,
+            category: category,
             description: description,
             date: date
         };

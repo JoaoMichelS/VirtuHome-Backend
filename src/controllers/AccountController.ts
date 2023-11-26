@@ -18,7 +18,7 @@ export class AccountController{
 
     private initRoutes(){
         this.router.get(this.path + '/:id', this.getAccountById.bind(this));
-        this.router.get(this.path + 's/:id', this.getUserAccounts.bind(this));
+        this.router.get(this.path + '/user/:id', this.getUserAccounts.bind(this));
         this.router.get(this.path + 's/:status', this.getAccountByStatus.bind(this));
         this.router.post(this.path, this.postCreateAccount.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteAccount.bind(this));
