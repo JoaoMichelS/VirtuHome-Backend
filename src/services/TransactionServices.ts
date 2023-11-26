@@ -5,6 +5,10 @@ export class TransactionService{
     private readonly transactionRepository: TransactionRepository = new TransactionRepository();
 
     constructor() {}
+    
+    public async getUserTransaction(id: string): Promise<Transaction[] | undefined> {
+        return this.transactionRepository.findUserTransactions(id);
+    }
 
     public async getTransactionById(id: string): Promise<TransactionResponse | undefined> {
         return this.transactionRepository.findTransactionById(id);

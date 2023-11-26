@@ -34,11 +34,36 @@ export class TransactionRepository{
         return this.checkDoc(doc);
     }
 
-    public async findUserTransactions(userID: string): Promise<Transaction[] | undefined>{
-        const transactions = db.collection('Transaction').where("userID", "==", userID).
-        withConverter(documentConverter<Transaction>());
-        const docs = (await transactions.get()).docs
-        return this.checkDocs(docs);
+    public async findUserTransactions(userId: string): Promise<Transaction[] | undefined>{
+        try {
+            const transactionsRef = db.collection('Transaction');
+            const querySnapshot = await transactionsRef.where('userId', '==', userId).get();
+        
+            if (querySnapshot.empty) {
+              console.log('No matching documents.');
+              return [];
+            } else {
+              const transactions: Transaction[] = [];
+              querySnapshot.forEach((doc) => {
+                const transactionData = doc.data();
+                const transaction: Transaction = {
+                    accountId: transactionData.accountId,
+                    amount: transactionData.amount,
+                    category: transactionData.category,
+                    date: transactionData.date,
+                    description: transactionData.description,
+                    type: transactionData.type,
+                    userId: transactionData.userId,
+                    id: transactionData.id
+                };
+                transactions.push(transaction);
+              });
+              return transactions;
+            }
+          } catch (error) {
+            console.error('Error getting account by accountId:', error);
+            return undefined;
+          }
     }
 
     public async findTransactionByStatus(status: boolean): Promise<Transaction[] | undefined>{

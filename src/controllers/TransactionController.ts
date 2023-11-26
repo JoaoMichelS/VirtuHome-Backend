@@ -17,10 +17,12 @@ export class TransactionController{
 
     private initRoutes(){
         this.router.get(this.path + '/:id', this.getTransactionById.bind(this));
-        this.router.get(this.path + 's/:id', this.getUserTransaction.bind(this));
+        this.router.get(this.path + '/user/:id', this.getUserTransaction.bind(this));
         this.router.post(this.path, this.postCreateTransaction.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteTransaction.bind(this));
     }
+    
+    
 
     public async postDeleteTransaction(req: Request, res: Response){
         const account = await this.accountService.postDeleteCallById(req.params.id);
@@ -33,7 +35,7 @@ export class TransactionController{
     }
 
     public async postCreateTransaction(req: Request, res: Response) {
-        const { id, accountId, amount, type, category, description, date } = req.body;
+        const { id, accountId, userId, amount, type, category, description, date } = req.body;
 
         // Verifique se a conta existe
         const accountExists = await this.accountService.getAccountById(accountId);
@@ -45,6 +47,7 @@ export class TransactionController{
         const newTransaction: Transaction = {
             id: uuid(),
             accountId: accountId,
+            userId: userId,
             amount: amount,
             type: type,
             category: category,
@@ -83,7 +86,7 @@ export class TransactionController{
     }
 
     public async getUserTransaction(req: Request, res: Response){
-        const accounts = await this.accountService.getUserAccounts(req.params.id);
+        const accounts = await this.transactionService.getUserTransaction(req.params.id);
         if (accounts == undefined) {
             res.status(400).send({message:"Error"});
         }
