@@ -27,8 +27,8 @@ export class AccountService{
         return this.accountRepository.deleteAccountById(id);
     }
 
-    public async postUpdateAccountById(id: string, data: any): Promise<AccountResponse | undefined>{
-        return this.accountRepository.updateAccountById(id, data);
+    public async postUpdateAccountById(id: string, data: any, amount: number): Promise<AccountResponse | undefined>{
+        return this.accountRepository.updateAccountById(id, data, amount);
     }
 
 }

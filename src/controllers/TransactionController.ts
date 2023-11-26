@@ -69,8 +69,8 @@ export class TransactionController{
         // Adicione a nova conta ao array de transações a contas
         accountExists.transactions.push(newTransaction);
 
-        // Atualize o usuário com a nova conta
-        await this.accountService.postUpdateAccountById(accountId, accountExists);
+        // Atualize a conta com a nova transação
+        await this.accountService.postUpdateAccountById(accountId, accountExists, amount);
 
         res.status(200).send(response);
     }

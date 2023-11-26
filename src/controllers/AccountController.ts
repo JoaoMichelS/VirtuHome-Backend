@@ -103,13 +103,13 @@ export class AccountController{
         };
     }
 
-    public async postUpdateUserById(req: Request, res: Response){
-        const response = await this.accountService.postUpdateAccountById(req.params.id, req.body);
-        if (response == undefined) {
-            res.status(400).send({message:"Error"});
-        }
-        else {
-            res.status(200).send(response); 
-        }; 
-    }
+    // public async postUpdateUserById(req: Request, res: Response){
+    //     const response = await this.accountService.postUpdateAccountById(req.params.id, req.body);
+    //     if (response == undefined) {
+    //         res.status(400).send({message:"Error"});
+    //     }
+    //     else {
+    //         res.status(200).send(response); 
+    //     }; 
+    // }
 }

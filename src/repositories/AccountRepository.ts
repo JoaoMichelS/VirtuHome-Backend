@@ -95,28 +95,47 @@ export class AccountRepository{
         return this.checkDocs(docs);
     }
 
-    public async updateAccountById(accountId: string, data: any): Promise<AccountResponse | undefined>{
+    public async updateAccountById(accountId: string, data: any, amount: number): Promise<AccountResponse | undefined>{
         try {
             const accountsRef = db.collection('Account');
             const querySnapshot = await accountsRef.where('accountId', '==', accountId).get();
     
             if (querySnapshot.empty) {
-                console.log('No matching documents.');
+                console.log('No matching document.');
                 return undefined;
-            } else {
-                let accountResponse: AccountResponse | undefined;
-                querySnapshot.forEach(async (doc) => {
-                    await doc.ref.update(data);
-                    const updatedDoc = await doc.ref.get();
-                    const accountData = updatedDoc.data();
-                    accountResponse = {
-                        account: accountData as Account,
-                        transactions: [], // Supondo que as transações serão preenchidas posteriormente
-                        id: updatedDoc.id
-                    };
-                });
-                return accountResponse;
             }
+    
+            let updatedAccountData: Account | undefined;
+    
+            querySnapshot.forEach(async (doc) => {
+                const accountData = doc.data() as Account;
+                const currentBalance = accountData.balance;
+    
+                let updatedBalance: number;
+    
+                // Lógica para adicionar ou subtrair o amount do saldo atual
+                if (data.type === 'income') {
+                    updatedBalance = currentBalance + amount;
+                } else {
+                    updatedBalance = currentBalance - amount;
+                }
+    
+                // Atualizar o saldo no documento atual
+                await doc.ref.update({ balance: updatedBalance });
+    
+                // Recuperar o documento atualizado
+                const updatedAccountDoc = await accountsRef.doc(accountId).get();
+                updatedAccountData = updatedAccountDoc.data() as Account;
+            });
+    
+            // Construir a resposta com os dados atualizados da conta
+            const accountResponse: AccountResponse = {
+                account: updatedAccountData!,
+                transactions: [], // Supondo que as transações serão preenchidas posteriormente
+                id: accountId
+            };
+    
+            return accountResponse;
         } catch (error) {
             console.error('Error updating account by accountId:', error);
             return undefined;
