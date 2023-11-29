@@ -12,5 +12,6 @@ export type Account = {
 export type AccountResponse = {
     account: Account | undefined;
     transactions: Transaction[] | undefined;
+    name: string | undefined;
     id: string;
 }

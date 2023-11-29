@@ -11,6 +11,7 @@ export class AccountRepository{
         else {return {
             "account":doc.data(),
             "id": doc.id,
+            "name": doc.data.name,
             "transactions": doc.data()?.transactions}};
     }
 
@@ -46,7 +47,8 @@ export class AccountRepository{
                     accountResponse = {
                         account: accountData as Account,
                         transactions: [], // Supondo que as transações serão preenchidas posteriormente
-                        id: doc.id
+                        id: doc.id,
+                        name: (accountData as Account).name // Adicionando o nome da conta à resposta
                     };
                 });
                 return accountResponse;
@@ -98,21 +100,23 @@ export class AccountRepository{
         try {
             const accountsRef = db.collection('Account');
             const querySnapshot = await accountsRef.where('accountId', '==', accountId).get();
+    
             if (querySnapshot.empty) {
                 console.log('No matching document.');
                 return undefined;
             }
     
             let updatedAccountData: Account | undefined;
+            let accountName: string | undefined;
     
             for (const doc of querySnapshot.docs) {
                 const accountData = doc.data() as Account;
                 const currentBalance = accountData.balance;
     
                 let updatedBalance: number = 0; 
-                
+                    
                 const currentBalanceFloat = parseFloat(currentBalance);
-
+    
                 if (typeof amount === 'string') {
                     amount = parseFloat(amount); // Converta a string para um número
                 }
@@ -128,19 +132,24 @@ export class AccountRepository{
                         // Lida com situação de erro na conversão
                         console.error('Erro na conversão do balance para float');
                         // Lógica para lidar com o erro, se necessário
-                    }}else {
-                        console.error('Erro na conversão do amount para número');
                     }
-
+                } else {
+                    console.error('Erro na conversão do amount para número');
+                }
+    
                 await doc.ref.update({ balance: updatedBalance });
     
                 const updatedAccountDoc = await accountsRef.doc(accountId).get();
                 updatedAccountData = updatedAccountDoc.data() as Account;
+    
+                // Obtenha o nome da conta
+                accountName = accountData.name;
             }
     
             const accountResponse: AccountResponse = {
                 account: updatedAccountData!,
                 transactions: [], // Supondo que as transações serão preenchidas posteriormente
+                name: accountName,
                 id: accountId
             };
     
