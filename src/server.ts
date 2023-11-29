@@ -1,4 +1,5 @@
 import App from "./App";
+
 import { AccountController } from "./controllers/AccountController";
 import { TransactionController } from "./controllers/TransactionController";
 import { UserController } from "./controllers/UserController";

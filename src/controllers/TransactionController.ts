@@ -22,8 +22,6 @@ export class TransactionController{
         this.router.post(this.path + '/delete/:id', this.postDeleteTransaction.bind(this));
     }
     
-    
-
     public async postDeleteTransaction(req: Request, res: Response){
         const account = await this.accountService.postDeleteCallById(req.params.id);
         if (account == undefined) {
@@ -61,16 +59,16 @@ export class TransactionController{
             return;
         }
 
-        // Verifique se userExists.accounts está definido antes de manipulá-lo
+        // Verifique se userExists.transactions está definido antes de manipulá-lo
         if (accountExists.transactions === undefined) {
             accountExists.transactions = []; // Inicialize como um array vazio, se for o caso
         }
 
         // Adicione a nova conta ao array de transações a contas
         accountExists.transactions.push(newTransaction);
-
+        
         // Atualize a conta com a nova transação
-        await this.accountService.postUpdateAccountById(accountId, accountExists, amount);
+        await this.accountService.postUpdateAccountById(accountId, type, amount);
 
         res.status(200).send(response);
     }

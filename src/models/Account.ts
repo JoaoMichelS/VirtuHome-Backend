@@ -2,7 +2,7 @@ import { Transaction } from "./Transaction";
 
 export type Account = {
     name: string;
-    balance: number;
+    balance: string;
     status: boolean;
     userId: string;
     accountId: string;

@@ -19,6 +19,7 @@ export class AccountController{
     private initRoutes(){
         this.router.get(this.path + '/:id', this.getAccountById.bind(this));
         this.router.get(this.path + '/user/:id', this.getUserAccounts.bind(this));
+        this.router.get(this.path + '/monthlyBalances/:id', this.getMonthlyBalances.bind(this));
         this.router.get(this.path + 's/:status', this.getAccountByStatus.bind(this));
         this.router.post(this.path, this.postCreateAccount.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteAccount.bind(this));
@@ -80,6 +81,16 @@ export class AccountController{
         }
         else {
             res.status(200).send(account); 
+        };
+    }
+
+    public async getMonthlyBalances(req: Request, res: Response){
+        const accounts = await this.accountService.getUserAccounts(req.params.id);
+        if (accounts == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(accounts); 
         };
     }
 

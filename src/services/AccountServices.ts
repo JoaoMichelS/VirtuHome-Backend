@@ -1,7 +1,6 @@
 import { AccountRepository } from "../repositories/AccountRepository";
 import { Account, AccountResponse } from "../models/Account";
 
-
 export class AccountService{
     private readonly accountRepository: AccountRepository = new AccountRepository();
 

@@ -98,7 +98,6 @@ export class AccountRepository{
         try {
             const accountsRef = db.collection('Account');
             const querySnapshot = await accountsRef.where('accountId', '==', accountId).get();
-    
             if (querySnapshot.empty) {
                 console.log('No matching document.');
                 return undefined;
@@ -106,28 +105,39 @@ export class AccountRepository{
     
             let updatedAccountData: Account | undefined;
     
-            querySnapshot.forEach(async (doc) => {
+            for (const doc of querySnapshot.docs) {
                 const accountData = doc.data() as Account;
                 const currentBalance = accountData.balance;
     
-                let updatedBalance: number;
-    
-                // Lógica para adicionar ou subtrair o amount do saldo atual
-                if (data.type === 'income') {
-                    updatedBalance = currentBalance + amount;
-                } else {
-                    updatedBalance = currentBalance - amount;
+                let updatedBalance: number = 0; 
+                
+                const currentBalanceFloat = parseFloat(currentBalance);
+
+                if (typeof amount === 'string') {
+                    amount = parseFloat(amount); // Converta a string para um número
                 }
-    
-                // Atualizar o saldo no documento atual
+                if (!isNaN(amount)) {
+                    if (!isNaN(currentBalanceFloat)) {
+                        // Verifique se a conversão foi bem-sucedida antes de realizar operações matemáticas
+                        if (data === 'income') {
+                            updatedBalance = currentBalanceFloat + amount;
+                        } else {
+                            updatedBalance = currentBalanceFloat - amount;
+                        }
+                    } else {
+                        // Lida com situação de erro na conversão
+                        console.error('Erro na conversão do balance para float');
+                        // Lógica para lidar com o erro, se necessário
+                    }}else {
+                        console.error('Erro na conversão do amount para número');
+                    }
+
                 await doc.ref.update({ balance: updatedBalance });
     
-                // Recuperar o documento atualizado
                 const updatedAccountDoc = await accountsRef.doc(accountId).get();
                 updatedAccountData = updatedAccountDoc.data() as Account;
-            });
+            }
     
-            // Construir a resposta com os dados atualizados da conta
             const accountResponse: AccountResponse = {
                 account: updatedAccountData!,
                 transactions: [], // Supondo que as transações serão preenchidas posteriormente
@@ -140,6 +150,7 @@ export class AccountRepository{
             return undefined;
         }
     }
+    
 
     public async deleteAccountById(accountId: string): Promise<AccountResponse | undefined>{
         const account = db.collection('Account').doc(accountId).withConverter(documentConverter<Account>());

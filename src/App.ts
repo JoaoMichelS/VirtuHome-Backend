@@ -4,7 +4,7 @@ const cors = require('cors');
 class App {
   public app: express.Application;
   public port: number;
- 
+
   constructor(controllers: any[], port: number) {
     this.app = express();    
     this.port = port;
@@ -15,7 +15,9 @@ class App {
  
   private initializeMiddlewares() {
     this.app.use(express.json());
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: ("*"),
+    })); 
   }
  
   private initializeControllers(controllers: any[]) {
