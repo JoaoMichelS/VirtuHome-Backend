@@ -12,7 +12,8 @@ export class UserRepository{
             "name": doc.data()?.name,
             "email": doc.data()?.email,
             "id": doc.id,
-            "accounts": doc.data()?.accounts
+            "accounts": doc.data()?.accounts,
+            "goals": doc.data()?.goals
         }};
     }
 

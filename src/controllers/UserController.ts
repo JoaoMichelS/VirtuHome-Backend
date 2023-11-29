@@ -20,7 +20,7 @@ export class UserController{
 
     public async postCreateUser(req: Request, res: Response){
         const {name, email, password} = req.body;
-        const newUser: User = {name, email, password, accounts: []}
+        const newUser: User = {name, email, password, accounts: [], goals: []}
         const response = await this.userService.postCreateUser(newUser);
         if (response == undefined) {
             res.status(400).send({message:"Error"});
