@@ -1,37 +1,42 @@
 import { GoalRepository } from "../repositories/GoalRepository";
 import { Goal, GoalResponse } from "../models/Goal";
+import { Transaction } from "../models/Transaction";
 
 export class GoalService{
-    private readonly accountRepository: GoalRepository = new GoalRepository();
+    private readonly goalRepository: GoalRepository = new GoalRepository();
 
     constructor() {}
 
-    public async postUpdateGoalStatus(goalId: string, transactions: any[]): Promise<GoalResponse | undefined> {
-        return this.accountRepository.updateGoalStatus(goalId, transactions);
+    public async postUpdateGoalStatus(goalId: string, transactions: Transaction[]): Promise<GoalResponse | undefined> {
+        return this.goalRepository.VerifyGoal(goalId, transactions);
+    }
+
+    public async updateGoalStatusById(goalId: string, status: string): Promise<GoalResponse | undefined> {
+        return this.goalRepository.updateGoalStatusById(goalId, status);
     }
 
     public async getGoalById(goalId: string): Promise<GoalResponse | undefined> {
-        return this.accountRepository.findGoalById(goalId);
+        return this.goalRepository.findGoalById(goalId);
     }
 
     public async getUserGoals(id: string): Promise<Goal[] | undefined> {
-        return this.accountRepository.findUserGoals(id);
+        return this.goalRepository.findUserGoals(id);
     }
 
     public async getGoalByStatus(status: boolean): Promise<Goal[] | undefined> {
-        return this.accountRepository.findGoalByStatus(status);
+        return this.goalRepository.findGoalByStatus(status);
     }
 
     public async postCreateGoal(newGoal: Goal): Promise<GoalResponse | undefined> {
-        return this.accountRepository.createGoal(newGoal);
+        return this.goalRepository.createGoal(newGoal);
     }
 
     public async postDeleteCallById(id: string): Promise<GoalResponse | undefined>{
-        return this.accountRepository.deleteGoalById(id);
+        return this.goalRepository.deleteGoalById(id);
     }
 
     public async postUpdateGoalById(id: string, data: any,): Promise<GoalResponse | undefined>{
-        return this.accountRepository.updateGoalById(id, data);
+        return this.goalRepository.updateGoalById(id, data);
     }
 
 }

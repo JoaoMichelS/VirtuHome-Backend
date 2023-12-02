@@ -2,10 +2,12 @@ import { DocumentSnapshot, QueryDocumentSnapshot } from "firebase-admin/firestor
 import { db } from "../database/firebase";
 import { Goal, GoalResponse } from "../models/Goal";
 import { documentConverter } from "../utils/DocumentConverter";
+import { Transaction } from "../models/Transaction";
+import { GoalService } from "../services/GoalServices";
 
 export class GoalRepository{
     constructor(){}
-
+    
     private checkDoc(doc: DocumentSnapshot<Goal>): GoalResponse | undefined {
         if (doc == undefined){return undefined}
         else {return {
@@ -23,12 +25,74 @@ export class GoalRepository{
         } catch { return undefined } ;
     }
 
-    public async updateGoalStatus(goalId: string, transactions: any[]): Promise<GoalResponse | undefined>{
-        //const result = (await db.collection('Goal').add(newGoal)).withConverter(documentConverter<Goal>());
-        //result.set(newGoal);
-        //const doc = await result.get()
-        //return this.checkDoc(doc);
-        return
+    public async VerifyGoal(goalId: string, transactions: Transaction[]): Promise<GoalResponse | undefined> {
+        const expensesByCategory: { [category: string]: number } = {};
+    
+        transactions.forEach((transaction) => {
+            const { category, amount } = transaction;
+            if (!expensesByCategory[category]) {
+                expensesByCategory[category] = 0;
+            }
+            expensesByCategory[category] += amount;
+        });
+    
+        try {
+            const goalResponse = await this.findGoalById(goalId);
+    
+            if (!goalResponse || !goalResponse.goal) {
+                return undefined;
+            }
+    
+            const goal = goalResponse.goal;
+            const processedSpendingCategories: { [category: string]: number } = {};
+
+            for (const category in goal.spendingCategories) {
+                processedSpendingCategories[category] = goal.spendingCategories[category];
+            }
+            const exceededCategories = compareExpensesWithGoal(expensesByCategory, processedSpendingCategories);
+            // Verificar se existem categorias excedidas
+            if (exceededCategories.length > 0) {
+                // Atualizar o status do goal para 'abandoned'
+                const updatedGoal = await this.updateGoalStatusById(goalId, 'abandoned');
+            }
+    
+            function compareExpensesWithGoal(spending: { [category: string]: number }, goals: { [category: string]: number }): string[] {
+                const exceededCategories: string[] = [];
+              
+                for (const category in spending) {
+                  if (category in goals && spending[category] > goals[category]) {
+                    exceededCategories.push(category);
+                  }
+                }
+              
+                return exceededCategories;
+            }
+    
+            // Aqui você pode realizar outras operações com as categorias excedidas, se necessário
+    
+            return goalResponse;
+        } catch (error) {
+            console.error('Error updating goal status:', error);
+            return undefined;
+        }
+    }
+    
+    public async updateGoalStatusById(id: string, status: string): Promise<GoalResponse | undefined> {
+        try {
+            const goalRef = db.collection('Goal').doc(id);
+    
+            // Atualizar apenas o campo 'status' da meta
+            await goalRef.update({ status });
+    
+            // Recuperar o documento atualizado
+            const updatedDoc = await goalRef.get() as DocumentSnapshot<Goal>;
+    
+            // Retornar o documento atualizado ou undefined se não encontrado
+            return this.checkDoc(updatedDoc);
+        } catch (error) {
+            console.error('Error updating goal status:', error);
+            return undefined;
+        }
     }
 
     public async createGoal(newGoal: Goal): Promise<GoalResponse | undefined>{

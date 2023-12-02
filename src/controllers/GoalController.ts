@@ -45,7 +45,7 @@ export class GoalController{
         //const respone = await this.goalService.postUpdateGoalStatus(goalId, transactions);
         
         //res.status(200).send({ message: "Goal check performed successfully" });
-        res.status(200).send({ message: "Goal " });
+        res.status(200).send({ message: "Goal" });
     }
 
     public async postDeleteGoal(req: Request, res: Response){
