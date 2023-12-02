@@ -3,15 +3,21 @@ import { UserService } from "../services/UserServices";
 import { Goal } from "../models/Goal";
 import { Request, Response, Router } from "express";
 import { v4 as uuid, v4 } from 'uuid';
+import { AccountService } from "../services/AccountServices";
+import { TransactionService } from "../services/TransactionServices";
 
 
 export class GoalController{
     public path: string = "/goal";
     public router: Router = Router();
-    private readonly accountService: GoalService = new GoalService();
+    private readonly goalService: GoalService = new GoalService();
+    private readonly accountService: AccountService = new AccountService();
+    private readonly transactionService: TransactionService = new TransactionService();
     private readonly userService : UserService;
     constructor (userService: UserService) {
-        this.accountService = new GoalService();
+        this.goalService = new GoalService();
+        this.accountService = new AccountService();
+        this.transactionService = new TransactionService();
         this.userService = userService;
         this.initRoutes();
     }
@@ -23,6 +29,23 @@ export class GoalController{
         this.router.get(this.path + 's/:status', this.getGoalByStatus.bind(this));
         this.router.post(this.path, this.postCreateGoal.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteGoal.bind(this));
+        this.router.post(this.path + '/checkGoal', this.postCheckGoal.bind(this));
+    }
+
+    public async postCheckGoal(req: Request, res: Response){
+        const { userId, startDate, endDate, goalId } = req.body;
+
+        const goalExists = await this.goalService.getGoalById(goalId);
+        if (!goalExists) {
+            res.status(404).send({ message: "Goal not found" });
+            return;
+        }
+
+        const transactions = await this.transactionService.getTransactionsByDateRange(userId, startDate, endDate);
+        //const respone = await this.goalService.postUpdateGoalStatus(goalId, transactions);
+        
+        //res.status(200).send({ message: "Goal check performed successfully" });
+        res.status(200).send({ message: "Goal " });
     }
 
     public async postDeleteGoal(req: Request, res: Response){
@@ -36,7 +59,7 @@ export class GoalController{
     }
 
     public async postCreateGoal(req: Request, res: Response) {
-        const { userId, status, description, monthlyIncome, targetValue, percentageSave, spendingCategories } = req.body;
+        const { userId, status, description, monthlyIncome, targetValue, percentageSave, spendingCategories, startDate, endDate } = req.body;
 
         // Verifique se o usuário existe
         const userExists = await this.userService.getUserById(userId);
@@ -51,12 +74,13 @@ export class GoalController{
             description: description,
             monthlyIncome: monthlyIncome,
             targetValue: targetValue,
-            percentageSave: percentageSave,
             spendingCategories: spendingCategories,
+            startDate: startDate,
+            endDate: endDate,
             status: status
         };
 
-        const response = await this.accountService.postCreateGoal(newGoal);
+        const response = await this.goalService.postCreateGoal(newGoal);
         if (!response) {
             res.status(400).send({ message: "Error creating account" });
             return;
@@ -77,7 +101,7 @@ export class GoalController{
     }
 
     public async getGoalById(req: Request, res: Response){
-        const account = await this.accountService.getGoalById(req.params.id);
+        const account = await this.goalService.getGoalById(req.params.id);
         if (account == undefined) {
             res.status(400).send({message:"Error"});
         }
@@ -87,7 +111,7 @@ export class GoalController{
     }
 
     public async getMonthlyBalances(req: Request, res: Response){
-        const accounts = await this.accountService.getUserGoals(req.params.id);
+        const accounts = await this.goalService.getUserGoals(req.params.id);
         if (accounts == undefined) {
             res.status(400).send({message:"Error"});
         }
@@ -97,7 +121,7 @@ export class GoalController{
     }
 
     public async getUserGoals(req: Request, res: Response){
-        const accounts = await this.accountService.getUserGoals(req.params.id);
+        const accounts = await this.goalService.getUserGoals(req.params.id);
         if (accounts == undefined) {
             res.status(400).send({message:"Error"});
         }
@@ -107,7 +131,7 @@ export class GoalController{
     }
 
     public async getGoalByStatus(req: Request, res: Response){
-        const accounts = await this.accountService.getGoalByStatus(Boolean(req.params.status));
+        const accounts = await this.goalService.getGoalByStatus(Boolean(req.params.status));
         if (accounts == undefined) {
             res.status(400).send({message:"Error"});
         }

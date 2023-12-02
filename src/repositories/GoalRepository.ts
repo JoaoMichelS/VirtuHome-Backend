@@ -23,6 +23,14 @@ export class GoalRepository{
         } catch { return undefined } ;
     }
 
+    public async updateGoalStatus(goalId: string, transactions: any[]): Promise<GoalResponse | undefined>{
+        //const result = (await db.collection('Goal').add(newGoal)).withConverter(documentConverter<Goal>());
+        //result.set(newGoal);
+        //const doc = await result.get()
+        //return this.checkDoc(doc);
+        return
+    }
+
     public async createGoal(newGoal: Goal): Promise<GoalResponse | undefined>{
         const result = (await db.collection('Goal').add(newGoal)).withConverter(documentConverter<Goal>());
         result.set(newGoal);
@@ -33,8 +41,7 @@ export class GoalRepository{
     public async findGoalById(goalId: string): Promise<GoalResponse | undefined>{
         try {
             const goalsRef = db.collection('Goal');
-            const querySnapshot = await goalsRef.where('goalId', '==', goalId).get();
-    
+            const querySnapshot = await goalsRef.where('id', '==', goalId).get();
             if (querySnapshot.empty) {
                 console.log('No matching documents.');
                 return undefined;
@@ -74,7 +81,8 @@ export class GoalRepository{
                 status: goalData.status,
                 monthlyIncome: goalData.monthlyIncome,
                 targetValue: goalData.targetValue,
-                percentageSave: goalData.percentageSave,
+                startDate: goalData.startDate,
+                endDate: goalData.endDate,
                 spendingCategories: goalData.spendingCategories
               };
               goals.push(goal);

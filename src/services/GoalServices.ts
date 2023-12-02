@@ -6,8 +6,12 @@ export class GoalService{
 
     constructor() {}
 
-    public async getGoalById(id: string): Promise<GoalResponse | undefined> {
-        return this.accountRepository.findGoalById(id);
+    public async postUpdateGoalStatus(goalId: string, transactions: any[]): Promise<GoalResponse | undefined> {
+        return this.accountRepository.updateGoalStatus(goalId, transactions);
+    }
+
+    public async getGoalById(goalId: string): Promise<GoalResponse | undefined> {
+        return this.accountRepository.findGoalById(goalId);
     }
 
     public async getUserGoals(id: string): Promise<Goal[] | undefined> {

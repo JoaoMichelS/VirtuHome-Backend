@@ -4,22 +4,37 @@ import { Transaction } from "../models/Transaction";
 import { Request, Response, Router } from "express";
 import { v4 as uuid, v4 } from 'uuid';
 import { UserService } from "../services/UserServices";
+import { GoalService } from "../services/GoalServices";
 
 export class TransactionController{
     public path: string = "/transaction";
     public router: Router = Router();
     private readonly transactionService: TransactionService = new TransactionService();
     private readonly accountService: AccountService = new AccountService();
+    private readonly goalService: GoalService = new GoalService();
     constructor () {
         this.accountService = new AccountService();
+        this.goalService = new GoalService();
         this.initRoutes();
     }
 
     private initRoutes(){
         this.router.get(this.path + '/:id', this.getTransactionById.bind(this));
         this.router.get(this.path + '/user/:id', this.getUserTransaction.bind(this));
+        this.router.get(this.path + '/dateRange', this.getTransactionsByDateRange.bind(this));
         this.router.post(this.path, this.postCreateTransaction.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteTransaction.bind(this));
+    }
+
+    public async getTransactionsByDateRange(req: Request, res: Response){
+        const { userId, startDate, endDate } = req.body;
+        const transactions = await this.transactionService.getTransactionsByDateRange(userId, startDate, endDate);
+        if (transactions == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(transactions); 
+        }; 
     }
     
     public async postDeleteTransaction(req: Request, res: Response){

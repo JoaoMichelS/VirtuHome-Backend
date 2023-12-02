@@ -4,7 +4,7 @@ export interface Transaction {
     userId: string;
     amount: number; // Valor da transação
     type: 'income' | 'expense'; // Tipo de transação (entrada ou saída)
-    category: 'Moradia' | 'Alimentação' | 'Saúde' | 'Transporte' | 'Educação' | 'Lazer';
+    category: 'Moradia' | 'Alimentação' | 'Saúde' | 'Transporte' | 'Educação' | 'Lazer' | 'Salário' | 'Presente' | 'Prêmio' | 'Investimentos' | 'Outros';
     description: string; // Descrição da transação
     date: Date; // Data da transação
 }

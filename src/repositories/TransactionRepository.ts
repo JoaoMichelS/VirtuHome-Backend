@@ -28,6 +28,40 @@ export class TransactionRepository{
         return this.checkDoc(doc);
     }
 
+    public async findTransactionByDateRange(userId: string, startDate: Date, endDate: Date): Promise<Transaction[] | undefined>{
+        try {
+            const transactionsRef = db.collection('Transaction');
+            
+            // Faça a consulta utilizando where para filtrar pelo userId e pela data
+            const querySnapshot = await transactionsRef
+                .where('userId', '==', userId)
+                .where('date', '>=', startDate)
+                .where('date', '<=', endDate)
+                .get();
+            
+            // Processar os resultados da consulta
+            const transactions: Transaction[] = [];
+            querySnapshot.forEach((doc) => {
+                const transactionData = doc.data() as Transaction;
+                const transaction: Transaction = {
+                    accountId: transactionData.accountId,
+                    amount: transactionData.amount,
+                    category: transactionData.category,
+                    date: transactionData.date,
+                    description: transactionData.description,
+                    type: transactionData.type,
+                    userId: transactionData.userId,
+                    id: transactionData.id
+                };
+                transactions.push(transaction);
+            });
+            return transactions;
+        } catch (error) {
+            console.error('Error getting transactions by date range:', error);
+            return undefined;
+        }
+    }
+    
     public async findTransactionById(id: string): Promise<TransactionResponse | undefined>{
         const transaction = db.collection('Transaction').doc(id).withConverter(documentConverter<Transaction>());
         const doc = await transaction.get();

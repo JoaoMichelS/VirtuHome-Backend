@@ -14,6 +14,10 @@ export class TransactionService{
         return this.transactionRepository.findTransactionById(id);
     }
 
+    public async getTransactionsByDateRange(userId: string, startDate: Date, endDate: Date): Promise<Transaction[] | undefined> {
+        return this.transactionRepository.findTransactionByDateRange(userId, startDate, endDate);
+    }
+
     public async getUserTransactions(userID: string): Promise<Transaction[] | undefined> {
         return this.transactionRepository.findUserTransactions(userID);
     }

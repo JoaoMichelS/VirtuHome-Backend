@@ -6,10 +6,9 @@ export interface Goal {
     description: string;
     monthlyIncome: number;
     targetValue: number; 
-    percentageSave: number;
     spendingCategories: SpendingCategory[];
-    //startDate: Date;
-    //endDate: Date;
+    startDate: Date;
+    endDate: Date;
     //progress: number; // Progresso em direção à meta
     status: 'active' | 'completed' | 'abandoned'; // Estado da meta
     //notes?: string; // Notas opcionais sobre a meta
