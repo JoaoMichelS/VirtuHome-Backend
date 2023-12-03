@@ -36,9 +36,10 @@ export class AccountRepository{
         try {
             const accountsRef = db.collection('Account');
             const querySnapshot = await accountsRef.where('accountId', '==', accountId).get();
+            console.log(accountId);
     
             if (querySnapshot.empty) {
-                console.log('No matching documents.');
+                console.log('No matching documents here.');
                 return undefined;
             } else {
                 let accountResponse: AccountResponse | undefined;

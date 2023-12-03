@@ -55,7 +55,7 @@ export class GoalRepository{
                 // Atualizar o status do goal para 'abandoned'
                 const updatedGoal = await this.updateGoalStatusById(goalId, 'abandoned');
             }
-    
+            
             function compareExpensesWithGoal(spending: { [category: string]: number }, goals: { [category: string]: number }): string[] {
                 const exceededCategories: string[] = [];
               

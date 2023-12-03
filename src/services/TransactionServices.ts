@@ -10,7 +10,7 @@ export class TransactionService{
         return this.transactionRepository.findUserTransactions(id);
     }
 
-    public async getTransactionById(id: string): Promise<TransactionResponse | undefined> {
+    public async getTransactionById(id: string): Promise<Transaction[] | undefined> {
         return this.transactionRepository.findTransactionById(id);
     }
 
@@ -30,11 +30,11 @@ export class TransactionService{
         return this.transactionRepository.createTransaction(newTransaction);
     }
 
-    public async postUpdateTransactionById(id: string, data: any): Promise<TransactionResponse | undefined>{
+    public async postUpdateTransactionById(id: string, data: any): Promise<Transaction | undefined>{
         return this.transactionRepository.updateTransactionById(id, data);
     }
 
-    public async postDeleteTransactionById(id: string): Promise<TransactionResponse | undefined>{
+    public async postDeleteTransactionById(id: string): Promise<Transaction | undefined>{
         return this.transactionRepository.deleteTransactionById(id);
     }
 }

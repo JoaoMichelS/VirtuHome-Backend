@@ -23,7 +23,18 @@ export class TransactionController{
         this.router.get(this.path + '/user/:id', this.getUserTransaction.bind(this));
         this.router.get(this.path + '/dateRange', this.getTransactionsByDateRange.bind(this));
         this.router.post(this.path, this.postCreateTransaction.bind(this));
-        this.router.post(this.path + '/delete/:id', this.postDeleteTransaction.bind(this));
+        this.router.delete(this.path + '/delete/:id', this.deleteTransactionById.bind(this));
+        this.router.post(this.path + '/:id', this.postUpdateTransactionById.bind(this));
+    }
+
+    public async postUpdateTransactionById(req: Request, res: Response){
+        const response = await this.transactionService.postUpdateTransactionById(req.params.id, req.body);
+        if (response == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(response); 
+        }; 
     }
 
     public async getTransactionsByDateRange(req: Request, res: Response){
@@ -37,8 +48,8 @@ export class TransactionController{
         }; 
     }
     
-    public async postDeleteTransaction(req: Request, res: Response){
-        const account = await this.accountService.postDeleteCallById(req.params.id);
+    public async deleteTransactionById(req: Request, res: Response){
+        const account = await this.transactionService.postDeleteTransactionById(req.params.id);
         if (account == undefined) {
             res.status(400).send({message:"Error"});
         }
@@ -74,9 +85,8 @@ export class TransactionController{
             return;
         }
 
-        // Verifique se userExists.transactions está definido antes de manipulá-lo
         if (accountExists.transactions === undefined) {
-            accountExists.transactions = []; // Inicialize como um array vazio, se for o caso
+            accountExists.transactions = []; 
         }
 
         // Adicione a nova conta ao array de transações a contas
@@ -89,7 +99,7 @@ export class TransactionController{
     }
 
     public async getTransactionById(req: Request, res: Response){
-        const account = await this.accountService.getAccountById(req.params.id);
+        const account = await this.transactionService.getTransactionById(req.params.id);
         if (account == undefined) {
             res.status(400).send({message:"Error"});
         }
