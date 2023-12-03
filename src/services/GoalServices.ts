@@ -35,7 +35,7 @@ export class GoalService{
         return this.goalRepository.deleteGoalById(id);
     }
 
-    public async postUpdateGoalById(id: string, data: any,): Promise<GoalResponse | undefined>{
+    public async postUpdateGoalById(id: string, data: any,): Promise<Goal | undefined>{
         return this.goalRepository.updateGoalById(id, data);
     }
 

@@ -30,6 +30,7 @@ export class GoalController{
         this.router.post(this.path, this.postCreateGoal.bind(this));
         this.router.post(this.path + '/delete/:id', this.postDeleteGoal.bind(this));
         this.router.post(this.path + '/checkGoal', this.postCheckGoal.bind(this));
+        this.router.post(this.path + '/:id', this.postUpdateGoalById.bind(this));
     }
 
     public async postCheckGoal(req: Request, res: Response){
@@ -140,13 +141,13 @@ export class GoalController{
         };
     }
 
-    // public async postUpdateUserById(req: Request, res: Response){
-    //     const response = await this.accountService.postUpdateGoalById(req.params.id, req.body);
-    //     if (response == undefined) {
-    //         res.status(400).send({message:"Error"});
-    //     }
-    //     else {
-    //         res.status(200).send(response); 
-    //     }; 
-    // }
+     public async postUpdateGoalById(req: Request, res: Response){
+        const response = await this.goalService.postUpdateGoalById(req.params.id, req.body);
+        if (response == undefined) {
+            res.status(400).send({message:"Error"});
+        }
+        else {
+            res.status(200).send(response); 
+        }; 
+     }
 }

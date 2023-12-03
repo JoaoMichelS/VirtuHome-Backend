@@ -166,11 +166,25 @@ export class GoalRepository{
         return this.checkDocs(docs);
     }
     
-    public async updateGoalById(id: string, data: any): Promise<GoalResponse | undefined>{
-        const transaction = db.collection('Goal').doc(id).withConverter(documentConverter<Goal>());
-        await transaction.update(data);
-        const doc = await transaction.get();
-        return this.checkDoc(doc);
+    public async updateGoalById(id: string, newData: any): Promise<Goal | undefined>{
+        try{
+            const goalsRef = db.collection('Goal');
+            const goalSnapshot = await goalsRef.where('id', '==', id).get();
+
+            if (goalSnapshot.empty) {
+                console.log('Goal not found.');
+                return undefined;
+            }
+
+            const goalData = goalSnapshot.docs[0].data() as Goal;
+            const updatedGoalData = { ...goalData, ...newData };
+
+            await goalSnapshot.docs[0].ref.update(updatedGoalData);
+            return updatedGoalData as Goal;
+        } catch (error) {
+            console.error('Error updating goal:', error);
+            return undefined;
+          }
     }
 
     public async deleteGoalById(goalId: string): Promise<GoalResponse | undefined>{
