@@ -187,10 +187,24 @@ export class GoalRepository{
           }
     }
 
-    public async deleteGoalById(goalId: string): Promise<GoalResponse | undefined>{
-        const goal = db.collection('Goal').doc(goalId).withConverter(documentConverter<Goal>());
-        await goal.delete();
-        const doc = await goal.get();
-        return this.checkDoc(doc); 
+    public async deleteGoalById(goalId: string): Promise<Goal | undefined>{
+        try {
+            const goalsRef = db.collection('Goal');
+            const goalSnapshot = await goalsRef.where('id', '==', goalId).get();
+        
+            if (goalSnapshot.empty) {
+              console.log('Goal not found.');
+              return;
+            }
+        
+            const goalData = goalSnapshot.docs[0].data() as Goal;
+        
+            // Exclua a transação
+            await goalSnapshot.docs[0].ref.delete();
+            return goalData;
+          } catch (error) {
+            console.error('Error deleting goal:', error);
+            return;
+          }
+        }
     }
-}

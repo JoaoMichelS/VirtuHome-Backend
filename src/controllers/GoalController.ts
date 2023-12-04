@@ -28,7 +28,7 @@ export class GoalController{
         this.router.get(this.path + '/monthlyBalances/:id', this.getMonthlyBalances.bind(this));
         this.router.get(this.path + 's/:status', this.getGoalByStatus.bind(this));
         this.router.post(this.path, this.postCreateGoal.bind(this));
-        this.router.post(this.path + '/delete/:id', this.postDeleteGoal.bind(this));
+        this.router.delete(this.path + '/delete/:id', this.deleteGoalById.bind(this));
         this.router.post(this.path + '/checkGoal', this.postCheckGoal.bind(this));
         this.router.post(this.path + '/:id', this.postUpdateGoalById.bind(this));
     }
@@ -49,8 +49,8 @@ export class GoalController{
         res.status(200).send({ message: "Goal" });
     }
 
-    public async postDeleteGoal(req: Request, res: Response){
-        const account = await this.accountService.postDeleteCallById(req.params.id);
+    public async deleteGoalById(req: Request, res: Response){
+        const account = await this.goalService.postDeleteCallById(req.params.id);
         if (account == undefined) {
             res.status(400).send({message:"Error"});
         }
