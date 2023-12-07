@@ -7,10 +7,6 @@ export class GoalService{
 
     constructor() {}
 
-    public async postUpdateGoalStatus(goalId: string, transactions: Transaction[]): Promise<GoalResponse | undefined> {
-        return this.goalRepository.VerifyGoal(goalId, transactions);
-    }
-
     public async updateGoalStatusById(goalId: string, status: string): Promise<GoalResponse | undefined> {
         return this.goalRepository.updateGoalStatusById(goalId, status);
     }

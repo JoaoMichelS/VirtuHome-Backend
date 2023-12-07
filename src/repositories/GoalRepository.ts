@@ -24,58 +24,6 @@ export class GoalRepository{
             return goals;
         } catch { return undefined } ;
     }
-
-    public async VerifyGoal(goalId: string, transactions: Transaction[]): Promise<GoalResponse | undefined> {
-        const expensesByCategory: { [category: string]: number } = {};
-    
-        transactions.forEach((transaction) => {
-            const { category, amount } = transaction;
-            if (!expensesByCategory[category]) {
-                expensesByCategory[category] = 0;
-            }
-            expensesByCategory[category] += amount;
-        });
-    
-        try {
-            const goalResponse = await this.findGoalById(goalId);
-    
-            if (!goalResponse || !goalResponse.goal) {
-                return undefined;
-            }
-    
-            const goal = goalResponse.goal;
-            const processedSpendingCategories: { [category: string]: number } = {};
-
-            for (const category in goal.spendingCategories) {
-                processedSpendingCategories[category] = goal.spendingCategories[category];
-            }
-            const exceededCategories = compareExpensesWithGoal(expensesByCategory, processedSpendingCategories);
-            // Verificar se existem categorias excedidas
-            if (exceededCategories.length > 0) {
-                // Atualizar o status do goal para 'abandoned'
-                const updatedGoal = await this.updateGoalStatusById(goalId, 'abandoned');
-            }
-            
-            function compareExpensesWithGoal(spending: { [category: string]: number }, goals: { [category: string]: number }): string[] {
-                const exceededCategories: string[] = [];
-              
-                for (const category in spending) {
-                  if (category in goals && spending[category] > goals[category]) {
-                    exceededCategories.push(category);
-                  }
-                }
-              
-                return exceededCategories;
-            }
-    
-            // Aqui você pode realizar outras operações com as categorias excedidas, se necessário
-    
-            return goalResponse;
-        } catch (error) {
-            console.error('Error updating goal status:', error);
-            return undefined;
-        }
-    }
     
     public async updateGoalStatusById(id: string, status: string): Promise<GoalResponse | undefined> {
         try {
@@ -142,12 +90,11 @@ export class GoalRepository{
                 id: goalData.id,
                 userId: goalData.userId,
                 description: goalData.description,
+                balance: goalData.balance,
                 status: goalData.status,
-                monthlyIncome: goalData.monthlyIncome,
                 targetValue: goalData.targetValue,
                 startDate: goalData.startDate,
                 endDate: goalData.endDate,
-                spendingCategories: goalData.spendingCategories
               };
               goals.push(goal);
             });

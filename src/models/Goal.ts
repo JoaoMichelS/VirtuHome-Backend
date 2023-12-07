@@ -4,14 +4,11 @@ export interface Goal {
     id: string;
     userId: string;
     description: string;
-    monthlyIncome: number;
     targetValue: number; 
-    spendingCategories: SpendingCategory[];
+    balance: number;
     startDate: Date;
     endDate: Date;
-    //progress: number; // Progresso em direção à meta
-    status: 'active' | 'completed' | 'abandoned'; // Estado da meta
-    //notes?: string; // Notas opcionais sobre a meta
+    status: 'active' | 'completed' | 'abandoned'; 
 }
 
 export interface GoalResponse {

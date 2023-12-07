@@ -2,6 +2,7 @@ import { DocumentSnapshot, QueryDocumentSnapshot } from "firebase-admin/firestor
 import { db } from "../database/firebase";
 import { Account, AccountResponse } from "../models/Account";
 import { documentConverter } from "../utils/DocumentConverter";
+import { User } from "../models/User";
 
 export class AccountRepository{
     constructor(){}
@@ -162,10 +163,40 @@ export class AccountRepository{
     }
     
 
-    public async deleteAccountById(accountId: string): Promise<AccountResponse | undefined>{
-        const account = db.collection('Account').doc(accountId).withConverter(documentConverter<Account>());
-        await account.delete();
-        const doc = await account.get();
-        return this.checkDoc(doc); 
-    }
+    public async deleteAccountById(accountId: string, userId: string): Promise<Account | undefined> {
+        try {
+          const accountRef = db.collection('Account');
+          const accountSnapshot = await accountRef.where('accountId', '==', accountId).get();
+      
+          if (accountSnapshot.empty) {
+            console.log('Account not found.');
+            return undefined;
+          }
+      
+          const accountData = accountSnapshot.docs[0].data() as Account;
+      
+          await accountSnapshot.docs[0].ref.delete();
+      
+          const userRef = db.collection('User').doc(userId);
+          const userSnapshot = await userRef.get();
+      
+          if (!userSnapshot.exists) {
+            console.log('User not found.');
+            return undefined;
+          }
+      
+          const userData = userSnapshot.data() as User;
+      
+          // Remova a conta do vetor de contas do usuário
+          userData.accounts = userData.accounts.filter(account => account.accountId !== accountId);
+      
+          // Atualize o documento do usuário no Firestore
+          await userRef.update({ accounts: userData.accounts });
+      
+          return accountData;
+        } catch (error) {
+          console.error('Error deleting account:', error);
+          return undefined;
+        }
+      }
 }

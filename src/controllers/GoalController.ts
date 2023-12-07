@@ -60,7 +60,7 @@ export class GoalController{
     }
 
     public async postCreateGoal(req: Request, res: Response) {
-        const { userId, status, description, monthlyIncome, targetValue, percentageSave, spendingCategories, startDate, endDate } = req.body;
+        const { userId, status, description, targetValue, balance, startDate, endDate } = req.body;
 
         // Verifique se o usuário existe
         const userExists = await this.userService.getUserById(userId);
@@ -73,9 +73,8 @@ export class GoalController{
             id: uuid(),
             userId: userId, 
             description: description,
-            monthlyIncome: monthlyIncome,
             targetValue: targetValue,
-            spendingCategories: spendingCategories,
+            balance: balance,
             startDate: startDate,
             endDate: endDate,
             status: status

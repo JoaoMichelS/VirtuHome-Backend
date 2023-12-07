@@ -22,8 +22,8 @@ export class AccountService{
         return this.accountRepository.createAccount(newAccount);
     }
 
-    public async postDeleteCallById(id: string): Promise<AccountResponse | undefined>{
-        return this.accountRepository.deleteAccountById(id);
+    public async deleteAccountById(accountId: string, userId: string): Promise<Account | undefined>{
+        return this.accountRepository.deleteAccountById(accountId, userId);
     }
 
     public async postUpdateAccountById(id: string, data: any, amount: number): Promise<AccountResponse | undefined>{

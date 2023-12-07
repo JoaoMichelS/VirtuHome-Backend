@@ -22,11 +22,11 @@ export class AccountController{
         this.router.get(this.path + '/monthlyBalances/:id', this.getMonthlyBalances.bind(this));
         this.router.get(this.path + 's/:status', this.getAccountByStatus.bind(this));
         this.router.post(this.path, this.postCreateAccount.bind(this));
-        this.router.post(this.path + '/delete/:id', this.postDeleteAccount.bind(this));
+        this.router.delete(this.path + '/delete/:accountid/:userid', this.deleteAccountById.bind(this));
     }
 
-    public async postDeleteAccount(req: Request, res: Response){
-        const account = await this.accountService.postDeleteCallById(req.params.id);
+    public async deleteAccountById(req: Request, res: Response){
+        const account = await this.accountService.deleteAccountById(req.params.accountid, req.params.userid);
         if (account == undefined) {
             res.status(400).send({message:"Error"});
         }
