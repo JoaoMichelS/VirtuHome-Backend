@@ -1,7 +1,7 @@
 <h1>VirtuHome - Aplicação mobile para controle financeiro</h1> 
 
 <p align="center">
-	<img src="Assets/Logo.png">
+	<img src="Logo.png">
 </p>
 
 <p align="center">
